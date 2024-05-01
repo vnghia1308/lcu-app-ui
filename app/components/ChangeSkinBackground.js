@@ -82,7 +82,6 @@ export default function Home() {
     }
 
     const setSkin = async skinId => {
-        console.log(skinId)
         if ("LcuInfo" in window) {
             try {
                 await axios.post(helper.getLeagueAPIUrl(window.LcuInfo.port, "/lol-summoner/v1/current-summoner/summoner-profile"),
@@ -95,7 +94,8 @@ export default function Home() {
                             'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
                             'Content-Type': 'application/json'
                         }
-                    })
+                    }
+                )
 
                 message.success("Yêu cầu đã được thực hiện")
             } catch {

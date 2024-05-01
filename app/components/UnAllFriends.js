@@ -40,7 +40,8 @@ export default function UnAllFriends() {
                             'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
                             'Content-Type': 'application/json'
                         }
-                    })
+                    }
+                )
 
                 await sleep(1000)
             }

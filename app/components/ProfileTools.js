@@ -30,7 +30,8 @@ export default function ProfileTools() {
                         'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
                         'Content-Type': 'application/json'
                     }
-                })
+                }
+            )
 
             message.success("Yêu cầu được thực hiện")
         } catch {
@@ -53,7 +54,8 @@ export default function ProfileTools() {
                         'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
                         'Content-Type': 'application/json'
                     }
-                })
+                }
+            )
 
             message.success("Yêu cầu được thực hiện")
         } catch {
@@ -78,7 +80,8 @@ export default function ProfileTools() {
                         'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
                         'Content-Type': 'application/json'
                     }
-                })
+                }
+            )
 
             message.success("Yêu cầu được thực hiện")
         } catch {

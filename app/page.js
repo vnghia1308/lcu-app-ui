@@ -4,7 +4,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Breadcrumb, Layout, Menu, Alert, ConfigProvider, theme } from 'antd'
-import { SkinOutlined, UserOutlined, UsergroupDeleteOutlined, ToolOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { SkinOutlined, UserOutlined, UsergroupDeleteOutlined, ToolOutlined, InfoCircleOutlined, GiftOutlined } from '@ant-design/icons'
 
 const { Header, Content, Footer, Sider } = Layout
 
@@ -13,6 +13,7 @@ import UnAllFriends from "./components/UnAllFriends"
 import ProfileTools from "./components/ProfileTools"
 import AccountStatus from "./components/AccountStatus"
 import ChanegSkinBackground from "./components/ChangeSkinBackground"
+import GiftShop from './components/GiftShop'
 
 export default function Home() {
   const [currentComponent, setNewComponent] = useState(<ChanegSkinBackground />)
@@ -62,6 +63,15 @@ export default function Home() {
     },
     {
       key: "5",
+      icon: React.createElement(GiftOutlined),
+      label: "Cửa hàng quà tặng",
+      onClick: () => {
+        setNewComponent(<GiftShop />)
+        setNewComponentName("Cửa hàng quà tặng")
+      }
+    },
+    {
+      key: "6",
       icon: React.createElement(InfoCircleOutlined),
       label: "Giới thiệu",
       onClick: () => {
@@ -71,7 +81,6 @@ export default function Home() {
     }
   ]
 
-  var firstLoad = false
   useEffect(() => {
     localStorage.setItem("summonerConnected", "false")
     const { ipcRenderer } = window.require('electron')

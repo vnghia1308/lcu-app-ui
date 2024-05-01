@@ -70,7 +70,8 @@ export default function AccountStatus() {
                             'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
                             'Content-Type': 'application/json'
                         }
-                    })
+                    }
+                )
                 
                 message.success("Yêu cầu đã được thực hiện")
             } catch {

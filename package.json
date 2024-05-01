@@ -9,14 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ant-design/cssinjs": "^1.18.0",
     "@ant-design/icons": "^5.2.6",
-    "antd": "^5.12.1",
+    "@ant-design/nextjs-registry": "^1.0.0",
+    "antd": "^5.16.5",
     "axios": "^1.6.8",
-    "next": "14.0.3",
+    "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-infinite-scroll-component": "^6.1.0",
     "styled-components": "^6.1.1"
   },
   "devDependencies": {
