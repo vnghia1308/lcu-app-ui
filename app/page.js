@@ -108,7 +108,7 @@ export default function Home() {
 
             if ("LcuInfo" in window && isAutoAcceptMatch == "true") {
               try {
-                await axios.post(helper.getLeagueAPIUrl(window.LcuInfo.port, "/lol-matchmaking/v1/ready-check/decline"), {},
+                await axios.post(helper.getLeagueAPIUrl(window.LcuInfo.port, "/lol-matchmaking/v1/ready-check/accept"), {},
                   {
                     headers: {
                       'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
