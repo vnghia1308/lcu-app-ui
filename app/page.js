@@ -14,6 +14,9 @@ import ProfileTools from "./components/ProfileTools"
 import AccountStatus from "./components/AccountStatus"
 import ChanegSkinBackground from "./components/ChangeSkinBackground"
 import GiftShop from './components/GiftShop'
+import MatchTools from "./components/MatchTools"
+
+import helper from '@/utils/helper'
 
 export default function Home() {
   const [currentComponent, setNewComponent] = useState(<ChanegSkinBackground />)
@@ -54,6 +57,15 @@ export default function Home() {
     },
     {
       key: "4",
+      icon: React.createElement(ToolOutlined),
+      label: "Công cụ trận đấu",
+      onClick: () => {
+        setNewComponent(<MatchTools />)
+        setNewComponentName("Công cụ trận đấu")
+      }
+    },
+    {
+      key: "5",
       icon: React.createElement(UserOutlined),
       label: "Trạng thái tài khoản",
       onClick: () => {
@@ -62,16 +74,16 @@ export default function Home() {
       }
     },
     {
-      key: "5",
+      key: "6",
       icon: React.createElement(GiftOutlined),
       label: "Cửa hàng quà tặng",
       onClick: () => {
         setNewComponent(<GiftShop />)
         setNewComponentName("Cửa hàng quà tặng")
       }
-    },
+    },    
     {
-      key: "6",
+      key: "7",
       icon: React.createElement(InfoCircleOutlined),
       label: "Giới thiệu",
       onClick: () => {
@@ -82,35 +94,111 @@ export default function Home() {
   ]
 
   useEffect(() => {
-    localStorage.setItem("summonerConnected", "false")
-    const { ipcRenderer } = window.require('electron')
+    // setup default
+    localStorage.setItem("isAutoAcceptMatch", false)
 
-    ipcRenderer.on('mainprocess-response-summoner', (event, arg) => {
-      setSummonerInfo({
-        type: "success",
-        message: <span>Đã nhận diện được <strong>Liên Minh Huyền Thoại</strong>, người chơi hiện tại là <strong>{arg}</strong></span>
-      })
+    const LCUWebSocketSubscriptions = [
+      // Gameflow Phase
+      {
+        url: "/lol-gameflow/v1/gameflow-phase",
+        event: async data => {
+          const CurrentPhase = data
 
-      localStorage.setItem("summonerConnected", "true")
-    })
+          if (CurrentPhase == "ReadyCheck") {
+            const isAutoAcceptMatch = localStorage.getItem("isAutoAcceptMatch")
 
-    ipcRenderer.on('mainprocess-response-lcu', async (event, arg) => {
-      window.LcuInfo = arg
-    })
+            if ("LcuInfo" in window && isAutoAcceptMatch == "true") {
+              try {
+                await axios.post(helper.getLeagueAPIUrl(window.LcuInfo.port, "/lol-matchmaking/v1/ready-check/decline"), {},
+                  {
+                    headers: {
+                      'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
+                      'Content-Type': 'application/json'
+                    }
+                  })
+              } catch { }
+            }
+          }
+        }
+      }
+    ]
+    
+    const WebSocket = window.require('ws')
 
-    ipcRenderer.send('request-mainprocess-action', {
-      type: "request_summoner"
-    })
+    const interval = setInterval(async () => {
+      if ("LcuInfo" in window) {
+        try {
+          const res0 = await axios.get(helper.getLeagueAPIUrl(window.LcuInfo.port, "/lol-summoner/v1/current-summoner"),
+            {
+              headers: {
+                'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
+                'Content-Type': 'application/json'
+              }
+            })
+
+          const summoner = res0.data
+
+          let SummonerId = summoner.summonerId
+          let SummonerName = summoner.gameName
+
+          if (summoner.unnamed) {
+            SummonerName = "Không xác định"
+          }
+
+          console.log(SummonerName)
+
+          if (typeof SummonerName == "undefined" || SummonerName == "undefined" || SummonerName == "") {
+            if (!summoner.unnamed) {
+              throw Error("undefined SummonerName")
+            }
+
+            return
+          }
+
+          setSummonerInfo({
+            type: "success",
+            message: <span>Đã nhận diện được <strong>Liên Minh Huyền Thoại</strong>, người chơi hiện tại là <strong>{SummonerName}</strong></span>
+          })
+
+          clearInterval(interval)
+        } catch { }
+      } else {
+        if (helper.GetLCUInfo()) {
+
+          const ws = new WebSocket(`wss://riot:${window.LcuInfo.password}@127.0.0.1:${window.LcuInfo.port}`, {
+            rejectUnauthorized: false,
+            headers: {
+              Authorization: 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password)
+            },
+          })
+
+          ws.on('error', console.error)
+          ws.on('open', () => {
+            ws.send(JSON.stringify([5, 'OnJsonApiEvent']))
+          })
+
+          ws.on("message", (content) => {
+            try {
+              const json = JSON.parse(content)
+              const [res] = json.slice(2)
+
+              const sb = LCUWebSocketSubscriptions.find(s => s.url == res.uri)
+
+              if (sb) {
+                sb.event(res.data)
+              }
+            }
+            catch { }
+          })
+        }
+      }
+    }, 500)
   }, [])
 
   return (
     <ConfigProvider
       theme={{
-        // 1. Use dark algorithm
         algorithm: theme.darkAlgorithm,
-
-        // 2. Combine dark algorithm and compact algorithm
-        // algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
       }}
     >
       <Layout style={{ height: "100vh" }}>

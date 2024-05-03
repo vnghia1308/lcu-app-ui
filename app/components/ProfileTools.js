@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Button, Input, message, Space, Popconfirm, Card } from 'antd'
+import { Button, message, Space, Popconfirm, Card } from 'antd'
 
 import helper from '@/utils/helper'
 
@@ -69,7 +69,7 @@ export default function ProfileTools() {
         SetLoadingAt(2, true)
 
         try {
-            await axios.post(helper.getLeagueAPIUrl(window.LcuInfo.port, "/lol-regalia/v2/current-summoner/regalia"),
+            await axios.put(helper.getLeagueAPIUrl(window.LcuInfo.port, "/lol-regalia/v2/current-summoner/regalia"),
                 {
                     preferredCrestType: "prestige",
                     preferredBannerType: "lastSeasonHighestRank",
