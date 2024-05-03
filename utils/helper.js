@@ -14,19 +14,19 @@ export default {
         const command = `powershell -Command "(Get-WmiObject Win32_Process -Filter \\"Name = '${processName}'\\").CommandLine"`
 
         try {
-            const output = execSync(command, { encoding: 'utf-8' });
+            const output = execSync(command, { encoding: 'utf-8' })
             const LeagueArguments = output.trim()
 
-            const regex = /--app-port=(\d+)|--remoting-auth-token=([a-zA-Z0-9]+)/g;
+            const regex = /--app-port=(\d+)|--remoting-auth-token=([-_a-zA-Z0-9]+)/g
 
             let matches
             let result = {}
             while ((matches = regex.exec(LeagueArguments)) !== null) {
                 if (matches[1]) {
-                    result["port"] = parseInt(matches[1]);
+                    result["port"] = parseInt(matches[1])
                 }
                 if (matches[2]) {
-                    result["password"] = matches[2];
+                    result["password"] = matches[2]
                 }
             }
 
