@@ -3,7 +3,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry'
 import './globals.css'
 
 export const metadata = {
-  title: 'League Extenions 3 (20240502-FINAL)',
+  title: 'League Extenions 3 (20240503-FINAL)',
   description: 'League Extenions',
 }
 

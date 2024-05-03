@@ -2,8 +2,7 @@
 
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
-import { Breadcrumb, Layout, Menu, Alert, ConfigProvider, theme } from 'antd'
+import { message, Breadcrumb, Layout, Menu, Alert, ConfigProvider, theme } from 'antd'
 import { SkinOutlined, UserOutlined, UsergroupDeleteOutlined, ToolOutlined, InfoCircleOutlined, GiftOutlined } from '@ant-design/icons'
 
 const { Header, Content, Footer, Sider } = Layout
@@ -122,7 +121,7 @@ export default function Home() {
         }
       }
     ]
-    
+
     const WebSocket = window.require('ws')
 
     const interval = setInterval(async () => {
@@ -164,7 +163,6 @@ export default function Home() {
         } catch { }
       } else {
         if (helper.GetLCUInfo()) {
-
           const ws = new WebSocket(`wss://riot:${window.LcuInfo.password}@127.0.0.1:${window.LcuInfo.port}`, {
             rejectUnauthorized: false,
             headers: {
@@ -172,7 +170,10 @@ export default function Home() {
             },
           })
 
-          ws.on('error', console.error)
+          ws.on('error', () => {
+            message.error("Đã có lỗi xảy ra khi kết nối tới máy chủ của LMHT")
+          })
+
           ws.on('open', () => {
             ws.send(JSON.stringify([5, 'OnJsonApiEvent']))
           })
