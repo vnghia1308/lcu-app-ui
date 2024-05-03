@@ -144,8 +144,6 @@ export default function Home() {
             SummonerName = "Không xác định"
           }
 
-          console.log(SummonerName)
-
           if (typeof SummonerName == "undefined" || SummonerName == "undefined" || SummonerName == "") {
             if (!summoner.unnamed) {
               throw Error("undefined SummonerName")
@@ -193,7 +191,7 @@ export default function Home() {
           })
         }
       }
-    }, 500)
+    }, 1000)
   }, [])
 
   return (
