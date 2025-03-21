@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Button, Form, Input, message, Space, Popconfirm, Card, Select } from 'antd'
+import { Button, Form, Input, message, Space, Card, Select } from 'antd'
 import helper from '@/utils/helper'
 
 const { TextArea } = Input

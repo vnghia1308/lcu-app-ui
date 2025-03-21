@@ -76,15 +76,15 @@ export default function Home() {
         setNewComponentName("Trạng thái tài khoản")
       }
     },
-    {
-      key: "6",
-      icon: React.createElement(GiftOutlined),
-      label: "Cửa hàng quà tặng",
-      onClick: () => {
-        setNewComponent(<GiftShop />)
-        setNewComponentName("Cửa hàng quà tặng")
-      }
-    },
+    // {
+    //   key: "6",
+    //   icon: React.createElement(GiftOutlined),
+    //   label: "Cửa hàng quà tặng",
+    //   onClick: () => {
+    //     setNewComponent(<GiftShop />)
+    //     setNewComponentName("Cửa hàng quà tặng")
+    //   }
+    // },
     {
       key: "7",
       icon: React.createElement(BlockOutlined),
@@ -309,7 +309,7 @@ export default function Home() {
         algorithm: theme.darkAlgorithm,
       }}
     >
-      <Layout style={{ height: "100vh" }}>
+      <Layout style={{ height: "95vh" }}>
         <Content
           style={{
             padding: '10px 30px',

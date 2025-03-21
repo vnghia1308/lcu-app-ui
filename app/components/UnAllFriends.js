@@ -1,7 +1,7 @@
 "use client"
 
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Form, Input, message, Space, Popconfirm, Card } from 'antd'
 
 import helper from '@/utils/helper'
@@ -13,10 +13,14 @@ export default function UnAllFriends() {
 
     const [isLoading, setIsLoading] = useState(false)
     const [exceptList, setExceptList] = useState('')
+    const [stateText, setStateText] = useState('Thực hiện')
+    const isLoadingRef = useRef(false)
 
     const confirm = async () => {
         setIsLoading(true)
+        isLoadingRef.current = true
 
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
         const ExceptList = exceptList.split('\n').map(x => x.trim()).filter(x => x != "")
 
         try {
@@ -30,18 +34,30 @@ export default function UnAllFriends() {
 
             const friends = res0.data
 
-            for (const friend of friends) {
+            // for i
+            for (let i = 0; i < friends.length; i++) {
+                const friend = friends[i]
+                if (isLoadingRef.current == false) {
+                    break
+                }
+
                 if (ExceptList.includes(friend.gameName))
                     continue
 
-                await axios.delete(helper.getLeagueAPIUrl(window.LcuInfo.port, '/lol-chat/v1/friends/' + friend.puuid),
-                    {
-                        headers: {
-                            'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
-                            'Content-Type': 'application/json'
+                try {
+                    await axios.delete(helper.getLeagueAPIUrl(window.LcuInfo.port, '/lol-chat/v1/friends/' + friend.puuid),
+                        {
+                            headers: {
+                                'Authorization': 'Basic ' + helper.getLeagueAPIPassword(window.LcuInfo.password),
+                                'Content-Type': 'application/json'
+                            }
                         }
-                    }
-                )
+                    )
+                } catch (error) {
+                    console.log(error)
+                }
+
+                setStateText('Đang thực hiện... ' + (i + 1) + '/' + friends.length)
 
                 await sleep(1000)
             }
@@ -50,6 +66,13 @@ export default function UnAllFriends() {
         }
 
         setIsLoading(false)
+        setStateText('Thực hiện')
+        isLoadingRef.current = false
+    }
+
+    const stop = () => {
+        setIsLoading(false)
+        isLoadingRef.current = false
     }
 
     return (
@@ -80,9 +103,15 @@ export default function UnAllFriends() {
                             cancelText="Hủy"
                         >
                             <Button name="excute" type="primary" htmlType="button" loading={isLoading}>
-                                Thực hiện
+                                {stateText}
                             </Button>
                         </Popconfirm>
+
+                        {isLoading && (
+                            <Button name="stop" type="primary" danger htmlType="button" onClick={stop}>
+                                Dừng lại
+                            </Button>
+                        )}
                     </Space>
                 </Form.Item>
             </Form>

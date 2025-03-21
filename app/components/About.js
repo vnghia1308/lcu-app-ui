@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'antd'
 
 export default function About() {
+    const currentYear = new Date().getFullYear()
     const [shell, setShell] = useState(null)
     const [ipcRenderer, setIpcRenderer] = useState(null)
 
@@ -29,7 +30,7 @@ export default function About() {
         <div>
             <Row>
                 <Col span={24} style={{ marginBottom: 15 }}>
-                    Phần mềm được viết & phát triển bởi <a onClick={() => OpenLink(`https:\/\/www.facebook.com\/nghiadev`)}><strong>Vy Nghĩa</strong></a> dựa trên <strong>ElectronJS</strong> (kết hợp từ <strong>NodeJS</strong> và <strong>VanillaJS</strong>). Nguồn cảm hứng và tài liệu tham khảo đến từ dự án <a onClick={() => OpenLink(`https:\/\/github.com\/Pupix\/rift-explorer`)}><strong>Rift Explorer</strong></a> của <strong>Pupix</strong>.
+                    Phần mềm được viết & phát triển bởi <a onClick={() => OpenLink(`https:\/\/www.facebook.com\/nghiadev`)}><strong>Vy Nghĩa</strong></a> dựa trên <strong>Electron.js</strong>. Nguồn cảm hứng và tài liệu tham khảo đến từ dự án <a onClick={() => OpenLink(`https:\/\/github.com\/Pupix\/rift-explorer`)}><strong>Rift Explorer</strong></a> của <strong>Pupix</strong>.
                 </Col>
 
                 <Col span={24} style={{ marginBottom: 50 }}>
@@ -41,7 +42,7 @@ export default function About() {
                 </Col>
 
                 <Col span={24}>
-                    <span>&copy; 2022 - 2024 Vy Nghia<br /><strong>League Extensions</strong>&apos;s not bannable by <strong>Riot Vanguard</strong>.</span>
+                    <span>&copy; 2022 - {currentYear} Vy Nghia<br /><strong>League Extensions</strong>&apos;s not bannable by <strong>Riot Vanguard</strong>.</span>
                 </Col>
             </Row>
         </div>
